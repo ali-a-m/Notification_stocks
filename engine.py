@@ -21,6 +21,7 @@ def main():
         STC_history = []
         
         STC_Post = Webhooks(IFTTT_URL, _symbol)
+        NOTICE = DeviceNotice(_symbol)
         sound = Sound()
 
         ### create the first thereshold list
@@ -45,6 +46,9 @@ def main():
 
             if price > ETHEREUM_PRICE_THRESHOLD[1]:
 
+                ### notification on device
+                NOTICE.send_notice(price)
+
                 ### post price into webhooks and play sound
                 send = STC_Post.send_notice(price=price)
                 sound.notice_me()
@@ -59,7 +63,9 @@ def main():
                 print('NEW THRESHOLD IS: {}\n'.format(ETHEREUM_PRICE_THRESHOLD))
         
             if price < ETHEREUM_PRICE_THRESHOLD[0]:
-
+                
+                NOTICE.send_notice(price)
+                
                 send = STC_Post.send_notice(price=price)
                 sound.notice_me()
                 if send:
@@ -73,9 +79,7 @@ def main():
             
             ### limiting the history list
             if len(STC_history) == 10:
-
                 ## print the history price
-
                 ETH_history = []
 
             ### sleep the loop

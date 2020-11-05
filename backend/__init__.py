@@ -6,6 +6,7 @@ import os
 import numpy as np
 import pickle as pkl
 
+from pynotifier import Notification
 from requests import Session
 from datetime import datetime
 
@@ -135,3 +136,12 @@ class Webhooks:
                 return True 
         except:
             return False
+
+from pynotifier import Notification
+
+class DeviceNotice:
+    def __init__(self, symbol):
+        self.symbol = symbol
+    def send_notice(self, price):
+        text = f'the bitcoin price at {price}'
+        Notification(f'{self.symbol} PRICE', text, icon_path='backend\images\images.ico').send()
